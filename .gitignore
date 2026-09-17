@@ -1,0 +1,22 @@
+# Base de datos y cache locales (se generan solos al correr la app)
+mezclilla.db
+rate_cache.json
+
+# Presupuestos generados (PDFs), quedan en la máquina de cada uno
+presupuestos/
+
+# Entorno virtual de Python
+.venv/
+venv/
+
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Empaquetado de PyInstaller (Windows)
+build/
+dist/
+*.spec
+
+# Archivos del sistema
+.DS_Store
