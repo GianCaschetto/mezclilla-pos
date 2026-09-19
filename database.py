@@ -21,9 +21,21 @@ Modelo de cobro híbrido — PROPORCIONAL (ver app.py para el detalle):
 
 import os
 import sqlite3
+import sys
 from datetime import datetime
 
-DB_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mezclilla.db")
+
+def _base_dir():
+    """Carpeta del .exe cuando está empaquetado (PyInstaller --onefile),
+    o del script cuando corre desde código fuente. Ver la misma función
+    en app.py para el porqué: __file__ solo no sirve en modo --onefile
+    porque apunta a una carpeta temporal que se borra al cerrar la app."""
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(os.path.abspath(sys.executable))
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+DB_FILE = os.path.join(_base_dir(), "mezclilla.db")
 
 
 def get_connection():

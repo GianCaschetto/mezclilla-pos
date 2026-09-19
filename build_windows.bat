@@ -42,10 +42,18 @@ if "%winver%"=="1" (
 
 pyinstaller --onefile --windowed --name "MezclillaPOS" app.py
 
+REM La carpeta resources/ (el logo) NO va dentro del .exe: la app la
+REM busca junto al .exe en tiempo de ejecucion. Se copia junto al
+REM ejecutable final para que quede lista para entregar/copiar.
+if exist resources (
+    xcopy /E /I /Y resources dist\resources >nul
+)
+
 echo.
-echo Listo. El ejecutable queda en dist\MezclillaPOS.exe
-echo Puedes copiar ese archivo .exe a cualquier PC con Windows,
-echo no requiere tener Python instalado.
+echo Listo. El ejecutable queda en dist\MezclillaPOS.exe junto con la
+echo carpeta dist\resources (el logo). Para instalarlo en otra PC copia
+echo TODA la carpeta dist (el .exe y resources juntos, en la misma
+echo carpeta) - no requiere tener Python instalado en esa PC.
 echo.
 echo Si compilaste para Windows 7, pruebalo primero en la PC de
 echo Windows 7 real antes de darlo por bueno (ver README.md).

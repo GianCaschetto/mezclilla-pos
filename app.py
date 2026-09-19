@@ -56,7 +56,22 @@ METODOS_PAGO = {
 
 EPS = 0.01  # margen (en US$) para considerar "pagado exacto"
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+def _base_dir():
+    """Carpeta donde viven los datos de la app (BD, cache, PDFs, logo).
+
+    Al empaquetar con PyInstaller --onefile, sys.executable apunta al
+    .exe real, pero __file__ apunta a una carpeta temporal que se borra
+    al cerrar el programa (_MEIPASS) — si usáramos __file__ aquí, la
+    base de datos, el cache de la tasa y los presupuestos generados se
+    perderían cada vez que se cierra la app. Por eso: si está "frozen"
+    (empaquetado), se usa la carpeta del .exe; si no, la del script.
+    """
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(os.path.abspath(sys.executable))
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+BASE_DIR = _base_dir()
 LOGO_PATH = os.path.join(BASE_DIR, "resources", "logo.png")
 PRESUPUESTOS_DIR = os.path.join(BASE_DIR, "presupuestos")
 

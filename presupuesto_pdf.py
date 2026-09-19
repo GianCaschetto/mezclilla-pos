@@ -5,6 +5,7 @@ y en bolívares, totales, tasa BCV usada y condiciones.
 """
 
 import os
+import sys
 from datetime import datetime, timedelta
 
 from reportlab.lib import colors
@@ -16,7 +17,18 @@ from reportlab.platypus import (
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_RIGHT, TA_CENTER
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+def _base_dir():
+    """Carpeta del .exe cuando está empaquetado (PyInstaller --onefile),
+    o del script cuando corre desde código fuente. Ver la misma función
+    en app.py para el porqué: __file__ solo no sirve en modo --onefile
+    porque apunta a una carpeta temporal que se borra al cerrar la app."""
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(os.path.abspath(sys.executable))
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+BASE_DIR = _base_dir()
 LOGO_PATH = os.path.join(BASE_DIR, "resources", "logo.png")
 
 NOMBRE_NEGOCIO = "Mezclilla San Miguel C.A"

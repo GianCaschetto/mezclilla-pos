@@ -22,11 +22,23 @@ arranque con un valor razonable incluso sin internet.
 import json
 import os
 import re
+import sys
 from datetime import datetime
 
 import requests
 
-CACHE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "rate_cache.json")
+
+def _base_dir():
+    """Carpeta del .exe cuando está empaquetado (PyInstaller --onefile),
+    o del script cuando corre desde código fuente. Ver la misma función
+    en app.py para el porqué: __file__ solo no sirve en modo --onefile
+    porque apunta a una carpeta temporal que se borra al cerrar la app."""
+    if getattr(sys, "frozen", False):
+        return os.path.dirname(os.path.abspath(sys.executable))
+    return os.path.dirname(os.path.abspath(__file__))
+
+
+CACHE_FILE = os.path.join(_base_dir(), "rate_cache.json")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "

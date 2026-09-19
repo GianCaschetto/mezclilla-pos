@@ -216,12 +216,16 @@ proyecto, pero hay que seguir los pasos exactos:
    `requirements-win7.txt` (no las de `requirements.txt`, que ya son
    demasiado nuevas para Windows 7) y una versión vieja de PyInstaller
    (4.10) compatible.
-4. El `.exe` queda en `dist\MezclillaPOS.exe`. **Pruébalo en la propia
-   PC de Windows 7 antes de darlo por bueno** — aunque compiles en una
-   PC más nueva, lo más seguro es compilar directamente en la de
-   Windows 7 (o una igual de vieja), porque un `.exe` armado en
-   Windows 10/11 a veces termina dependiendo de piezas del sistema que
-   Windows 7 no tiene, aunque el Python usado sea el correcto.
+4. Al terminar, queda una carpeta `dist` con `MezclillaPOS.exe` **y**
+   una carpeta `resources` adentro (el logo) — la app los necesita
+   juntos, uno al lado del otro, así que cuando copies el programa a
+   otra PC copia la carpeta `dist` completa, no solo el `.exe` suelto.
+   **Pruébalo en la propia PC de Windows 7 antes de darlo por bueno** —
+   aunque compiles en una PC más nueva, lo más seguro es compilar
+   directamente en la de Windows 7 (o una igual de vieja), porque un
+   `.exe` armado en Windows 10/11 a veces termina dependiendo de piezas
+   del sistema que Windows 7 no tiene, aunque el Python usado sea el
+   correcto.
 
 **Por qué pasa esto**: Python dejó de dar soporte oficial a Windows 7
 a partir de la versión 3.9 (versiones más nuevas simplemente no
@@ -244,6 +248,54 @@ conexión en esa PC y en ninguna otra parte de esa red hay problemas de
 internet, instalar el "Microsoft Visual C++ Redistributable" más
 reciente y tener Windows 7 con el Service Pack 1 y las actualizaciones
 al día suele resolverlo.
+
+## Instalar en la PC del negocio (Windows 7, sin Git ni Python)
+
+Si la PC final del negocio **no tiene Git ni Python instalados** (lo
+normal para la caja de una tienda), esa PC **no necesita tenerlos** —
+el `.exe` ya trae todo empaquetado adentro. Solo se compila una vez
+(en la sección de arriba, con Python 3.8.10 y `build_windows.bat`,
+idealmente en la misma PC de Windows 7 o una igual) y después se
+copia el resultado ya armado. Pasos, de principio a fin:
+
+1. **Compilar el .exe una sola vez** (sección "Si esa PC tiene Windows
+   7" de arriba). Al terminar tendrás una carpeta `dist` con
+   `MezclillaPOS.exe` y la carpeta `resources` adentro.
+2. **Copiar la carpeta `dist` completa** a la PC final del negocio, por
+   ejemplo con una memoria USB. No copies solo el `.exe` suelto — la
+   carpeta `resources` (el logo) tiene que quedar al lado del `.exe`,
+   dentro de la misma carpeta.
+3. En la PC del negocio, pon esa carpeta donde vaya a vivir de forma
+   permanente (por ejemplo `C:\MezclillaPOS`) — no la dejes en el
+   Escritorio de la cuenta de un usuario específico si varias personas
+   usan la misma PC, ni dentro de una carpeta temporal ni de la
+   memoria USB (si la sacas, la app deja de tener sus datos a mano).
+4. Dentro de esa carpeta, crea un acceso directo a `MezclillaPOS.exe`
+   y ponlo en el Escritorio o en el menú de Inicio, para abrir la app
+   con doble clic sin tener que buscar la carpeta cada vez (clic
+   derecho sobre `MezclillaPOS.exe` → "Crear acceso directo", y mueve
+   el acceso directo a donde lo quieras).
+5. Abre la app con ese acceso directo. La primera vez que corra, ella
+   sola crea junto al `.exe` los archivos que necesita para guardar
+   datos: `mezclilla.db` (la base de datos con productos, ventas e
+   historial), `rate_cache.json` (la última tasa BCV conocida, por si
+   no hay internet) y la carpeta `presupuestos` (los PDFs generados).
+   **Esos archivos son los datos reales del negocio** — viven en esa
+   misma carpeta, junto al `.exe`, y hay que respaldarlos (copiarlos a
+   otro lado de vez en cuando) igual que cualquier archivo importante;
+   no se suben a ningún lado automáticamente.
+6. La primera vez que Windows abra el `.exe`, es normal que
+   Windows Defender/SmartScreen muestre una advertencia ("Windows
+   protegió su PC") porque el programa no está firmado digitalmente —
+   es un archivo que compilaste tú mismo, no una amenaza. Hay que
+   hacer clic en "Más información" y luego "Ejecutar de todas formas".
+   Si el negocio tiene antivirus además de Windows Defender, puede
+   pedir lo mismo la primera vez.
+7. Para actualizar la app más adelante (una versión nueva), repite
+   solo los pasos 1 y 2: compila de nuevo y reemplaza el `.exe` y la
+   carpeta `resources` en la PC del negocio — **sin tocar ni borrar**
+   `mezclilla.db`, `rate_cache.json` ni la carpeta `presupuestos`
+   (esos son los datos, no el programa, y deben quedarse igual).
 
 ## Ajustes que probablemente quieras hacer después
 
