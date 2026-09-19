@@ -1,0 +1,20 @@
+# Dependencias para compilar/correr en Windows 7, con Python 3.8.10
+# (la última versión de Python con soporte oficial para Windows 7 — ver
+# nota en README.md). Cada versión aquí está fijada (pinned) a propósito:
+# las versiones más nuevas de estas librerías ya exigen Python 3.9, 3.10
+# o más nuevo, lo que las hace incompatibles con Windows 7. NO cambiar
+# estos números a ">=" sin volver a verificar el "Requires-Python" de
+# cada paquete en pypi.org.
+#
+#   ttkbootstrap 1.17.0  -> última versión que todavía pide Python >=3.8
+#                            (1.18.0 en adelante exige 3.9, luego 3.10)
+#   requests 2.31.0      -> versiones más nuevas (2.32+) ya exigen 3.10+
+#   beautifulsoup4 4.12.3 -> estable, compatible con 3.8
+#   Pillow 9.5.0          -> versiones más nuevas exigen 3.10+
+#   reportlab 4.0.9        -> pide Python >=3.7, compatible con 3.8
+
+ttkbootstrap==1.17.0
+requests==2.31.0
+beautifulsoup4==4.12.3
+Pillow==9.5.0
+reportlab==4.0.9

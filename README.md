@@ -177,26 +177,80 @@ respondiendo normalmente mientras tanto.
 ## Empacarla como programa de Windows (.exe)
 
 Esto debe hacerse **en una PC con Windows** (no se puede generar un
-.exe de Windows desde Mac ni desde Linux). Pasos:
+.exe de Windows desde Mac ni desde Linux). Los pasos cambian según la
+versión de Windows de la PC **donde va a correr la app** (no
+necesariamente donde la compilas):
+
+### Si esa PC tiene Windows 8.1, 10 u 11
 
 1. Copia esta carpeta completa a la PC con Windows.
-2. Asegúrate de tener Python instalado en esa PC
-   (<https://www.python.org/downloads/>, marcando la opción "Add
-   Python to PATH" durante la instalación).
+2. Instala Python normal (<https://www.python.org/downloads/>,
+   marcando "Add Python to PATH" durante la instalación).
 3. Haz doble clic en `build_windows.bat` (o ábrelo desde una consola
-   CMD parado en esta carpeta).
-4. Al terminar, el programa queda en `dist\MezclillaPOS.exe`. Ese
-   archivo ya lo puedes copiar a cualquier PC con Windows y usarlo sin
-   tener que instalar Python ni nada más — doble clic y abre.
+   CMD parado en esta carpeta) y responde "2" cuando pregunte la
+   versión de Windows.
+4. Al terminar, el programa queda en `dist\MezclillaPOS.exe`. Cópialo
+   a cualquier PC con Windows 8.1+ y ábrelo con doble clic — no
+   necesita tener Python instalado.
+
+### Si esa PC tiene Windows 7 — leer con cuidado
+
+Windows 7 necesita un Python más viejo, y una versión más vieja de la
+herramienta que arma el `.exe` (PyInstaller), porque las versiones
+actuales de ambos ya no funcionan ahí. Esto ya está resuelto en el
+proyecto, pero hay que seguir los pasos exactos:
+
+1. En la PC (idealmente la misma de Windows 7, para evitar sorpresas —
+   ver nota abajo), instala **Python 3.8.10** — no una versión más
+   nueva — desde
+   <https://www.python.org/downloads/release/python-3810/>. Baja el
+   instalador de 64 bits (`python-3.8.10-amd64.exe`) o el de 32 bits
+   (`python-3.8.10.exe`) según corresponda: en esa misma PC, abre el
+   Panel de control → Sistema y seguridad → Sistema, y busca "Tipo de
+   sistema" (dice "Sistema operativo de 32 bits" o "de 64 bits"). En
+   el instalador marca **"Add Python 3.8 to PATH"**.
+2. Copia esta carpeta completa a la PC con Windows 7.
+3. Haz doble clic en `build_windows.bat`, confirma que dice Python
+   3.8.x cuando lo pregunte, y responde **"1"** cuando pregunte la
+   versión de Windows. Esto instala las versiones fijadas en
+   `requirements-win7.txt` (no las de `requirements.txt`, que ya son
+   demasiado nuevas para Windows 7) y una versión vieja de PyInstaller
+   (4.10) compatible.
+4. El `.exe` queda en `dist\MezclillaPOS.exe`. **Pruébalo en la propia
+   PC de Windows 7 antes de darlo por bueno** — aunque compiles en una
+   PC más nueva, lo más seguro es compilar directamente en la de
+   Windows 7 (o una igual de vieja), porque un `.exe` armado en
+   Windows 10/11 a veces termina dependiendo de piezas del sistema que
+   Windows 7 no tiene, aunque el Python usado sea el correcto.
+
+**Por qué pasa esto**: Python dejó de dar soporte oficial a Windows 7
+a partir de la versión 3.9 (versiones más nuevas simplemente no
+arrancan ahí — falta un componente del sistema, "api-ms-win-core-path
+-l1-1-0.dll"). Por la misma razón, varias de las librerías que usa
+esta app (`ttkbootstrap`, `requests`, `Pillow`, `reportlab`) subieron
+su versión mínima de Python a 3.9 o 3.10 en sus lanzamientos más
+recientes — por eso `requirements-win7.txt` fija versiones específicas
+más viejas de cada una, ya verificadas como compatibles con Python
+3.8. Y PyInstaller, desde la versión 5, solo dice soportar "Windows 8
+en adelante" — la 4.10 es la última que menciona que Windows 7
+"debería funcionar" (sin garantía oficial, pero es lo mejor
+disponible).
+
+La consulta de la tasa BCV por internet (HTTPS) debería funcionar
+igual en Windows 7 sin nada adicional, porque Python trae su propio
+motor de conexión segura (no depende de que Windows 7 tenga
+actualizado su propio soporte de TLS). Si de todos modos falla la
+conexión en esa PC y en ninguna otra parte de esa red hay problemas de
+internet, instalar el "Microsoft Visual C++ Redistributable" más
+reciente y tener Windows 7 con el Service Pack 1 y las actualizaciones
+al día suele resolverlo.
 
 ## Ajustes que probablemente quieras hacer después
 
 - Cambiar la lista de métodos de pago (`METODOS_PAGO` en `app.py`) si
   agregan o quitan alguno.
-- Agregar el nombre del negocio en el recibo en pantalla (el logo ya
-  quedó incluido).
-- Si más adelante quieren imprimir o exportar a PDF, o llevar
-  inventario/clientes, se puede agregar sin rehacer lo que ya existe.
+- Si más adelante quieren llevar inventario, clientes o reportes de
+  caja, se puede agregar sin rehacer lo que ya existe.
 
 ## Archivos del proyecto
 
@@ -216,7 +270,11 @@ Esto debe hacerse **en una PC con Windows** (no se puede generar un
 - `resources/scrapper_bcv_reference.js` — el script de referencia que
   enviaste (Node/cheerio); se dejó guardado aquí como documentación,
   no lo usa la app (la lógica equivalente está en `bcv_rate.py`).
-- `requirements.txt` — librerías necesarias.
+- `requirements.txt` — librerías necesarias (versiones normales, para
+  Mac o Windows 8.1+).
+- `requirements-win7.txt` — las mismas librerías, pero en versiones
+  fijadas compatibles con Windows 7 + Python 3.8.10 (ver la sección
+  "Empacarla como programa de Windows" más arriba).
 - `build_windows.bat` — script para generar el .exe en Windows.
 - `presupuestos/` — se crea sola la primera vez que generas un
   presupuesto; ahí se guardan los PDF por defecto.
